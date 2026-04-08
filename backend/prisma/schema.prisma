@@ -1,0 +1,52 @@
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+model Battle {
+  id              Int            @id @default(autoincrement())
+  battleWon       Boolean        @map("battle_won")
+  battleDuration  Decimal        @map("battle_duration") @db.Decimal(10, 2)
+  recordedAt      DateTime       @default(now()) @map("recorded_at") @db.Timestamptz
+  
+  damageEntries   DamageEntry[]
+  staggerEntries  StaggerEntry[]
+  healingEntries  HealingEntry[]
+
+  @@map("battles")
+}
+
+model DamageEntry {
+  id          Int      @id @default(autoincrement())
+  battleId    Int      @map("battle_id")
+  playerClass String   @map("player_class") @db.VarChar(100)
+  amount      Decimal  @db.Decimal(12, 2)
+  battle      Battle   @relation(fields: [battleId], references: [id], onDelete: Cascade)
+
+  @@map("damage_entries")
+}
+
+model StaggerEntry {
+  id          Int      @id @default(autoincrement())
+  battleId    Int      @map("battle_id")
+  playerClass String   @map("player_class") @db.VarChar(100)
+  amount      Decimal  @db.Decimal(12, 2)
+  battle      Battle   @relation(fields: [battleId], references: [id], onDelete: Cascade)
+
+  @@map("stagger_entries")
+}
+
+model HealingEntry {
+  id          Int      @id @default(autoincrement())
+  battleId    Int      @map("battle_id")
+  playerClass String   @map("player_class") @db.VarChar(100)
+  amount      Decimal  @db.Decimal(12, 2)
+  battle      Battle   @relation(fields: [battleId], references: [id], onDelete: Cascade)
+
+  @@map("healing_entries")
+}

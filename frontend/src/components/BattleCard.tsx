@@ -1,0 +1,80 @@
+import { useState } from "react";
+import { BattleRecord } from "../types/battle";
+import { StatBar } from "./Statbar";
+
+interface BattleCardProps {
+    battle: BattleRecord;
+    index: number;
+}
+
+function formatDuration(secs: number): string {
+    const m = Math.floor(secs / 60);
+    const s = Math.floor(secs % 60);
+    return m > 0 ? `${m}m ${s}s` : `${s}s`;
+}
+
+function formatDate(iso: string): string {
+    return new Date(iso).toLocaleString(undefined, {
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+}
+
+export function BattleCard({ battle, index }: BattleCardProps) {
+    const [tab, setTab] = useState<"damage" | "stagger" | "healing">("damage");
+
+    const dataMap = { damage: battle.damage, stagger: battle.stagger, healing: battle.healing };
+    const current = dataMap[tab];
+    const maxVal = Math.max(...Object.values(current), 1);
+
+    const colors: Record<typeof tab, string> = {
+        damage: "linear-gradient(90deg, #c0392b, #e74c3c)",
+        stagger: "linear-gradient(90deg, #8e44ad, #9b59b6)",
+        healing: "linear-gradient(90deg, #1a6b3c, #27ae60)",
+    };
+
+    const hasEntries = Object.keys(current).length > 0;
+
+    return (
+    <article className="battle-card" style={{ animationDelay: `${index * 60}ms` }}>
+        <div className="card-header">
+        <div className="card-meta-left">
+            <span className={`outcome-badge ${battle.battle_won ? "won" : "lost"}`}>
+            {battle.battle_won ? "VICTORY" : "DEFEAT"}
+            </span>
+            <span className="battle-id">#{battle.id}</span>
+        </div>
+        <div className="card-meta-right">
+            <span className="duration">{formatDuration(battle.battle_duration)}</span>
+            <span className="recorded-at">{formatDate(battle.recorded_at)}</span>
+        </div>
+        </div>
+
+        <div className="tab-bar">
+        {(["damage", "stagger", "healing"] as const).map((t) => (
+            <button
+            key={t}
+            className={`tab-btn ${tab === t ? "active" : ""} tab-${t}`}
+            onClick={() => setTab(t)}
+            >
+            {t}
+            </button>
+        ))}
+        </div>
+
+        <div className="stat-list">
+        {hasEntries ? (
+            Object.entries(current)
+            .sort(([, a], [, b]) => b - a)
+            .map(([cls, val]) => (
+                <StatBar key={cls} label={cls} value={val} max={maxVal} color={colors[tab]} />
+            ))
+        ) : (
+            <p className="empty-stat">No {tab} recorded</p>
+        )}
+        </div>
+    </article>
+    );
+}
