@@ -137,6 +137,7 @@ export function BattleCard({ battle, index }: BattleCardProps) {
                                 key={cls}
                                 label={cls}
                                 value={val}
+                                perSecond={val / battle.battle_duration}
                                 max={maxVal}
                                 color={colors[tab]}
                             />
