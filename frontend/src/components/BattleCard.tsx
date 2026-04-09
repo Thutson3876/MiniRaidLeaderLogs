@@ -44,11 +44,10 @@ export function BattleCard({ battle, index }: BattleCardProps) {
             <span className={`outcome-badge ${battle.battle_won ? "won" : "lost"}`}>
             {battle.battle_won ? "VICTORY" : "DEFEAT"}
             </span>
-            <span className="battle-id">#{battle.id}</span>
         </div>
         <div className="card-meta-right">
-            <span className="duration">{formatDuration(battle.battle_duration)}</span>
             <span className="recorded-at">{formatDate(battle.recorded_at)}</span>
+            <span className="duration">{formatDuration(battle.battle_duration)}</span> 
         </div>
         </div>
 
