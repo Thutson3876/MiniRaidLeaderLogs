@@ -50,35 +50,33 @@ export function BattleCard({ battle, index }: BattleCardProps) {
         >
 
             <div className="card-header">
+                <div className="card-meta-top">
+                    <div className="card-meta-left">
 
-                <div className="card-meta-left">
+                        <span className={`outcome-badge ${battle.battle_won ? "won" : "lost"}`}>
+                            {battle.battle_won ? "VICTORY" : "DEFEAT"}
+                        </span>
 
-                    <span className={`outcome-badge ${battle.battle_won ? "won" : "lost"}`}>
-                        {battle.battle_won ? "VICTORY" : "DEFEAT"}
-                    </span>
+                        <span className="difficulty">
+                            Difficulty {battle.difficulty ?? "—"}
+                        </span>
 
-                    <span className="difficulty">
-                        Difficulty {battle.difficulty ?? "—"}
-                    </span>
+                    </div>
 
+                    <div className="card-meta-right">
+
+                        <span className="recorded-at">
+                            {formatDate(battle.recorded_at)}
+                        </span>
+
+                        <span className="duration">
+                            {formatDuration(battle.battle_duration)}
+                        </span>
+
+                    </div>
                 </div>
 
-                <div className="card-meta-right">
-
-                    <span className="recorded-at">
-                        {formatDate(battle.recorded_at)}
-                    </span>
-
-                    <span className="duration">
-                        {formatDuration(battle.battle_duration)}
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            {battle.modifiers && battle.modifiers.length > 0 && (
+                {battle.modifiers && battle.modifiers.length > 0 && (
 
                 <div className="modifier-row">
 
@@ -92,14 +90,6 @@ export function BattleCard({ battle, index }: BattleCardProps) {
                                 borderColor: mod.color
                             }}
                         >
-
-                            {mod.sprite && (
-                                <img
-                                    src={mod.sprite}
-                                    alt={mod.name}
-                                    className="modifier-icon"
-                                />
-                            )}
 
                             <span
                                 className="modifier-name"
@@ -116,6 +106,7 @@ export function BattleCard({ battle, index }: BattleCardProps) {
 
             )}
 
+            </div>
 
             <div className="tab-bar">
 
