@@ -1,6 +1,6 @@
 import { BattleRecord } from "./types/battle";
 
-const BASE = "/api";
+const BASE = "https://miniraidlogsapi.vercel.app/api";
 
 export async function fetchBattles(): Promise<BattleRecord[]> {
     const res = await fetch(`${BASE}/battles`);
