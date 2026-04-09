@@ -41,8 +41,8 @@ import { BattleCard } from "../components/BattleCard";
         <header className="site-header">
         <div className="header-inner">
             <div className="title-block">
-            <h1 className="site-title">DAMAGE METERS</h1>
-            <p className="site-sub">Combat Analytics Chronicle</p>
+            <h1 className="site-title">MINI RAID LOGS</h1>
+            <p className="site-sub">Git gud</p>
             </div>
             {battles.length > 0 && (
             <div className="summary-stats">

@@ -16,12 +16,24 @@
   --color-text-muted:    #666050;
   --color-text-bright:   #f3f3f3;
 
-  --color-red:           #c0392b;
+    --color-red:           #c0392b;
   --color-red-bright:    #e74c3c;
+
+  --color-orange:        #b9770e;
+  --color-orange-bright: #f39c12;
+  --color-yellow:        #b7950b;
+  --color-yellow-bright: #f1c40f;
   --color-green:         #1a6b3c;
   --color-green-bright:  #2ecc71;
+  --color-cyan:          #117a8b;
+  --color-cyan-bright:   #1abc9c;
+  --color-blue:          #1f618d;
+  --color-blue-bright:   #3498db;
   --color-purple:        #7d3c98;
   --color-purple-bright: #9b59b6;
+  --color-magenta:       #943126;
+  --color-magenta-bright:#e84393;
+
   --color-won:           #2ecc71;
   --color-lost:          #e74c3c;
 
@@ -153,7 +165,7 @@ body {
 
 .summary-label {
   font-family: var(--font-display);
-  font-size: 0.48rem;
+  font-size: 0.6rem;
   letter-spacing: 0.12em;
   color: var(--color-text-dim);
   text-transform: uppercase;
@@ -312,7 +324,7 @@ body {
 .tab-btn:hover { color: var(--color-text); background: rgba(255,255,255,0.03); }
 
 .tab-btn.active.tab-damage  { color: var(--color-red-bright);    border-color: var(--color-red-bright);    background: rgba(231,76,60,0.08); }
-.tab-btn.active.tab-stagger { color: var(--color-purple-bright); border-color: var(--color-purple-bright); background: rgba(155,89,182,0.08); }
+.tab-btn.active.tab-stagger { color: var(--color-yellow-bright); border-color: var(--color-yellow-bright); background: rgba(155,89,182,0.08); }
 .tab-btn.active.tab-healing { color: var(--color-green-bright);  border-color: var(--color-green-bright);  background: rgba(46,204,113,0.08); }
 
 .stat-list {

@@ -31,7 +31,7 @@ export function BattleCard({ battle, index }: BattleCardProps) {
 
     const colors: Record<typeof tab, string> = {
         damage: "linear-gradient(90deg, #c0392b, #e74c3c)",
-        stagger: "linear-gradient(90deg, #8e44ad, #9b59b6)",
+        stagger: "linear-gradient(90deg, #b7950b, #f1c40f)",
         healing: "linear-gradient(90deg, #1a6b3c, #27ae60)",
     };
 
