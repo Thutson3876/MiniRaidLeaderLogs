@@ -31,11 +31,12 @@ battlesRouter.post("/", async (req: Request, res: Response): Promise<void> => {
                     difficulty: payload.difficulty,
 
                     modifiers: {
-                        create: payload.modifierIDs.map((id) => ({
-                            modifierId: id
-                        }))
-                    },
-
+                    create: payload.modifierIDs.map((id) => ({
+                        modifier: {
+                            connect: { id } 
+                        }
+                    }))
+                },
                     damageEntries: {
                         create: Object.entries(payload.damage).map(([cls, amount]) => ({
                             playerClass: cls,
