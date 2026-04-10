@@ -86,7 +86,7 @@ import { BattleCard } from "../components/BattleCard";
         {loading && (
             <div className="state-block">
             <div className="spinner" />
-            <p>Consulting the chronicles…</p>
+            <p>Rewinding recent damage…</p>
             </div>
         )}
 
