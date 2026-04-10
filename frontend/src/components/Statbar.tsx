@@ -14,7 +14,7 @@ export function StatBar({ label, value, max, color, perSecond }: StatBarProps) {
 
     return (
         <div className="stat-bar-row">
-            <span className="stat-label">{label}</span>
+            <span className="stat-label" style={{ color: color }}>{label}</span>
             <div className="stat-track">
                 <div className="stat-fill" style={{ width: `${pct}%`, background: color }}>
                     <span className="stat-value-inline">
