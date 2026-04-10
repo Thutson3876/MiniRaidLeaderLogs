@@ -12,15 +12,27 @@ model Battle {
   battleWon       Boolean        @map("battle_won")
   battleDuration  Decimal        @map("battle_duration") @db.Decimal(10, 2)
   difficulty      Int            @default(0)
+  bossId          Int            @map("boss_id") @default(0)
   recordedAt      DateTime       @default(now()) @map("recorded_at") @db.Timestamptz
-  
+
   damageEntries   DamageEntry[]
   staggerEntries  StaggerEntry[]
   healingEntries  HealingEntry[]
-
   modifiers       BattleModifier[]
+  boss            Boss           @relation(fields: [bossId], references: [id])
 
   @@map("battles")
+}
+
+model Boss {
+  id          Int      @id
+  name        String   @db.VarChar(100)
+  description String   @db.Text
+  color       String   @db.VarChar(50)
+
+  battles     Battle[]
+
+  @@map("bosses")
 }
 
 model Modifier {

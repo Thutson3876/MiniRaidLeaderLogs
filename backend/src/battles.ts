@@ -12,6 +12,7 @@ battlesRouter.post("/", async (req: Request, res: Response): Promise<void> => {
         typeof payload.battleDuration !== "number" ||
         typeof payload.difficulty !== "number" ||
         !Array.isArray(payload.modifierIDs) ||
+        typeof payload.bossId !== "number" ||
         typeof payload.damage !== "object" ||
         typeof payload.stagger !== "object" ||
         typeof payload.healing !== "object"
@@ -37,26 +38,31 @@ battlesRouter.post("/", async (req: Request, res: Response): Promise<void> => {
                         }
                     }))
                 },
-                    damageEntries: {
-                        create: Object.entries(payload.damage).map(([cls, amount]) => ({
-                            playerClass: cls,
-                            amount,
-                        })),
-                    },
 
-                    staggerEntries: {
-                        create: Object.entries(payload.stagger).map(([cls, amount]) => ({
-                            playerClass: cls,
-                            amount,
-                        })),
-                    },
+                boss: {
+                    connect: { id: payload.bossId }
+                },
 
-                    healingEntries: {
-                        create: Object.entries(payload.healing).map(([cls, amount]) => ({
-                            playerClass: cls,
-                            amount,
-                        })),
-                    },
+                damageEntries: {
+                    create: Object.entries(payload.damage).map(([cls, amount]) => ({
+                        playerClass: cls,
+                        amount,
+                    })),
+                },
+
+                staggerEntries: {
+                    create: Object.entries(payload.stagger).map(([cls, amount]) => ({
+                        playerClass: cls,
+                        amount,
+                    })),
+                },
+
+                healingEntries: {
+                    create: Object.entries(payload.healing).map(([cls, amount]) => ({
+                        playerClass: cls,
+                        amount,
+                    })),
+                },
                 },
             });
         });
@@ -82,7 +88,8 @@ battlesRouter.get("/", async (_req: Request, res: Response): Promise<void> => {
                         modifier: true
                     }
                 },
-
+                
+                boss: true,
                 damageEntries: true,
                 staggerEntries: true,
                 healingEntries: true,
@@ -94,6 +101,7 @@ battlesRouter.get("/", async (_req: Request, res: Response): Promise<void> => {
             battle_won: b.battleWon,
             battle_duration: b.battleDuration.toNumber(),
             difficulty: b.difficulty,
+            boss: b.boss,
             recorded_at: b.recordedAt,
 
             modifiers: b.modifiers.map(m => ({
