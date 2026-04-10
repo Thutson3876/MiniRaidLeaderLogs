@@ -436,6 +436,8 @@ body {
   font-size: 0.9rem;
   color: var(--color-text-bright);
   text-align: right;
+
+  text-shadow: 2px 2px rgba(0,0,0,0.5);
 }
 
 .empty-stat {
