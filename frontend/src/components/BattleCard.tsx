@@ -50,7 +50,7 @@ export function BattleCard({ battle, index }: BattleCardProps) {
                             {battle.battle_won ? "VICTORY" : "DEFEAT"}
                         </span>
 
-                        {battle.boss && (<span>
+                        {battle.boss && (<span className="boss-name" style={{ color: battle.boss.color }}>
                             {battle.boss.name}
                         </span>)}
 
