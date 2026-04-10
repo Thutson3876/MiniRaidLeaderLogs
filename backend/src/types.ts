@@ -3,6 +3,7 @@ export interface MeterPayload {
     battleWon: boolean;
     difficulty: number;
     modifierIDs: Array<number>;
+    bossId: number;
     battleDuration: number;
     damage: Record<string, number>;
     stagger: Record<string, number>;
@@ -15,6 +16,7 @@ export interface BattleRecord {
     difficulty: number;
     modifiers: Modifier[];
     battle_duration: number;
+    boss_id: number;
     recorded_at: string;
     damage: Record<string, number>;
     stagger: Record<string, number>;
@@ -22,9 +24,16 @@ export interface BattleRecord {
 }
 
 export interface Modifier {
-  id: number;
-  name: string;
-  description: string;
-  color: string;
-  sprite: string;
+    id: number;
+    name: string;
+    description: string;
+    color: string;
+    sprite: string;
+}
+
+export interface Boss {
+    id: number;
+    name: string;
+    description: string;
+    color: string;
 }

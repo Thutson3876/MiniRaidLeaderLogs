@@ -6,11 +6,19 @@ export interface Modifier {
   sprite: string;
 }
 
+export interface Boss {
+  id: number;
+  name: string;
+  description: string;
+  color: string;
+}
+
 export interface BattleRecord {
   id: number;
   battle_won: boolean;
   battle_duration: number;
   difficulty: number;
+  boss: Boss;
   recorded_at: string;
 
   modifiers: Modifier[];
