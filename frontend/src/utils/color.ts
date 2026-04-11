@@ -18,7 +18,7 @@ function rgbToHex(r: number, g: number, b: number) {
       .join("")
   );
 }
-
+/*
 function lighten(hex: string, amount = 0.2) {
   const { r, g, b } = hexToRgb(hex);
 
@@ -27,7 +27,7 @@ function lighten(hex: string, amount = 0.2) {
   const newB = b + (255 - b) * amount;
 
   return rgbToHex(newR, newG, newB);
-}
+}*/
 
 function darken(hex: string, amount = 0.2) {
   const { r, g, b } = hexToRgb(hex);
