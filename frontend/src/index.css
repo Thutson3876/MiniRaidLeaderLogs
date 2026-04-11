@@ -496,8 +496,9 @@ body {
 
 .difficulty {
   margin-left: 10px;
-  opacity: 0.8;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-shadow: -1px 1px 3px #000;
 }
 
 .spinner {

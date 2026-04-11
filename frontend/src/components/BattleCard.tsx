@@ -2,6 +2,7 @@ import { useState } from "react";
 import { BattleRecord } from "../types/battle";
 import { StatBar } from "./Statbar";
 import { heroColors } from "../utils/color"
+import { formatDifficulty, difficultyColor } from "../utils/gameData"
 
 interface BattleCardProps {
     battle: BattleRecord;
@@ -54,8 +55,8 @@ export function BattleCard({ battle, index }: BattleCardProps) {
                             {battle.boss.name}
                         </span>)}
 
-                        <span className="difficulty">
-                            Difficulty {battle.difficulty ?? "—"}
+                        <span className="difficulty" style={{ color: `${difficultyColor(battle.difficulty)}`}}>
+                            {formatDifficulty(battle.difficulty)}
                         </span>
 
                     </div>
