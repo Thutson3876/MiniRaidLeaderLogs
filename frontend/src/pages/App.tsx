@@ -14,7 +14,7 @@ export function App() {
     const load = useCallback(async (activeFilters: FilterState) => {
         try {
             setError(null);
-            const data = await fetchBattles(activeFilters);
+            const { data } = await fetchBattles(activeFilters);
             setBattles(data);
         } catch {
             setError("Could not reach the server.");
@@ -25,12 +25,9 @@ export function App() {
 
     const loadTotal = useCallback(async () => {
         try {
-            const data = await fetchBattles(EMPTY_FILTERS);
-            setTotalCount(data.length);
-        } 
-        catch { 
-
-        }
+            const { total } = await fetchBattles(EMPTY_FILTERS);
+            setTotalCount(total); 
+        } catch {}
     }, []);
 
     useEffect(() => { loadTotal(); }, [loadTotal]);

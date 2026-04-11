@@ -3,6 +3,14 @@ import { FilterState } from "./components/BattleFilters";
 
 const BASE = "https://miniraidlogsapi.vercel.app/api";
 
+interface PaginatedBattles {
+    data: BattleRecord[];
+    total: number;
+    page: number;
+    perPage: number;
+    totalPages: number;
+}
+
 function buildQuery(filters?: Partial<FilterState>, page = 1, perPage = 20): string {
     const params = new URLSearchParams();
  
@@ -29,7 +37,7 @@ function buildQuery(filters?: Partial<FilterState>, page = 1, perPage = 20): str
     return params.toString();
 }
   
-export async function fetchBattles(filters?: Partial<FilterState>, page = 1, perPage = 20,): Promise<BattleRecord[]> {
+export async function fetchBattles(filters?: Partial<FilterState>, page = 1, perPage = 20): Promise<PaginatedBattles> {
     const qs = buildQuery(filters, page, perPage);
     const res = await fetch(`${BASE}/battles?${qs}`);
     if (!res.ok) throw new Error("Failed to fetch battles");

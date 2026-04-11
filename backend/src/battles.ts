@@ -107,38 +107,33 @@ battlesRouter.get("/", async (req: Request, res: Response): Promise<void> => {
     const bossId = bossIdParam !== undefined ? parseInt(bossIdParam) : undefined;
 
     try {
+        const andConditions: Prisma.BattleWhereInput[] = [
+            ...( characters?.length
+                ? characters.map((cls) => ({
+                    OR: [
+                        { damageEntries:  { some: { playerClass: cls } } },
+                        { staggerEntries: { some: { playerClass: cls } } },
+                        { healingEntries: { some: { playerClass: cls } } },
+                    ],
+                }))
+                : []),
+            ...( modifierIDs?.length
+                ? modifierIDs.map((id) => ({
+                    modifiers: { some: { modifierId: id } },
+                }))
+                : []),
+        ];
+
         const where: Prisma.BattleWhereInput = {
             ...(battleWonFilter !== undefined && { battleWon: battleWonFilter }),
-
             ...(diffMin !== undefined || diffMax !== undefined
                 ? { difficulty: { gte: diffMin, lte: diffMax } }
                 : {}),
-
             ...(recordedAfter !== undefined || recordedBefore !== undefined
                 ? { recordedAt: { gte: recordedAfter, lte: recordedBefore } }
                 : {}),
-
-            ...(characters?.length
-                ? {
-                    AND: characters.map((cls) => ({
-                        OR: [
-                            { damageEntries:  { some: { playerClass: cls } } },
-                            { staggerEntries: { some: { playerClass: cls } } },
-                            { healingEntries: { some: { playerClass: cls } } },
-                        ],
-                    })),
-                }
-                : {}),
-
-            ...(modifierIDs?.length
-                ? {
-                    AND: modifierIDs.map((id) => ({
-                        modifiers: { some: { modifierId: id } },
-                    })),
-                }
-                : {}),
-
             ...(bossId !== undefined && !isNaN(bossId) && { bossId }),
+            ...(andConditions.length > 0 && { AND: andConditions }),
         };
 
         const [total, rawBattles] = await prisma.$transaction([

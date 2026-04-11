@@ -29,10 +29,20 @@ function lighten(hex: string, amount = 0.2) {
   return rgbToHex(newR, newG, newB);
 }
 
-export function gradientFromColor(baseColor: string): string {
-  const lighter = lighten(baseColor, 0.25);
+function darken(hex: string, amount = 0.2) {
+  const { r, g, b } = hexToRgb(hex);
 
-  return `linear-gradient(90deg, ${baseColor}, ${lighter})`;
+  const newR = r + (r) * amount;
+  const newG = g + (g) * amount;
+  const newB = b + (b) * amount;
+
+  return rgbToHex(newR, newG, newB);
+}
+
+export function gradientFromColor(baseColor: string): string {
+  const modifiedColor = darken(baseColor, 0.25);
+
+  return `linear-gradient(90deg, ${modifiedColor}, ${baseColor})`;
 }
 
 export const heroColors: Record<string, string> = {
