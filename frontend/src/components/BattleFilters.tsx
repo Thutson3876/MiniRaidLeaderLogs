@@ -119,7 +119,7 @@ function MultiSelect({ label, placeholder, options, selected, onChange }: MultiS
                         <div className="bf-empty-opt">No options available</div>
                     ) : (
                         options.map((opt) => (
-                            <label key={opt.value} className="bf-option">
+                            <label key={opt.value} className={`bf-option ${selected.includes(opt.value) ? "selected" : ""}`}>
                                 <input
                                     type="checkbox"
                                     checked={selected.includes(opt.value)}
@@ -363,7 +363,7 @@ export function BattleFilters({ filters, onChange, resultCount, totalCount }: Ba
                             placeholder="Any boss"
                             value={draft.bossId !== undefined ? String(draft.bossId) : undefined}
                             onChange={(v) => setDraftField("bossId", v !== undefined ? parseInt(v) : undefined)}
-                            options={options.bosses.map((b) => ({ value: String(allModifiers.indexOf(b)), label: b }))}
+                            options={options.bosses.map((b) => ({ value: String(allBosses.indexOf(b)), label: b }))}
                         />
  
                         {/* Characters */}
