@@ -3,6 +3,7 @@ import { BattleRecord } from "../types/battle";
 import { fetchBattles } from "../api";
 import { BattleCard } from "../components/BattleCard";
 import { BattleFilters, FilterState, EMPTY_FILTERS } from "../components/BattleFilters";
+import { BattleSort, SortState, DEFAULT_SORT, sortBattles } from "../components/BattleSort";
 
 export function App() {
     const [battles, setBattles] = useState<BattleRecord[]>([]);
@@ -10,6 +11,7 @@ export function App() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [filters, setFilters] = useState<FilterState>(EMPTY_FILTERS);
+    const [sort, setSort] = useState<SortState>(DEFAULT_SORT);
 
     const load = useCallback(async (activeFilters: FilterState) => {
         try {
@@ -26,7 +28,7 @@ export function App() {
     const loadTotal = useCallback(async () => {
         try {
             const { total } = await fetchBattles(EMPTY_FILTERS);
-            setTotalCount(total); 
+            setTotalCount(total);
         } catch {}
     }, []);
 
@@ -41,6 +43,7 @@ export function App() {
 
     const wins = battles.filter((b) => b.battle_won).length;
     const losses = battles.length - wins;
+    const sortedBattles = sortBattles(battles, sort);
 
     return (
         <>
@@ -79,6 +82,10 @@ export function App() {
                         resultCount={battles.length}
                         totalCount={totalCount}
                     />
+                    <BattleSort
+                        sort={sort}
+                        onChange={setSort}
+                    />
                     <button
                         className="refresh-btn"
                         onClick={() => { load(filters); loadTotal(); }}
@@ -113,10 +120,10 @@ export function App() {
                     </div>
                 )}
 
-                {!loading && !error && battles.length > 0 && (
+                {!loading && !error && sortedBattles.length > 0 && (
                     <div className="battle-grid">
-                        {battles.map((b, i) => (
-                            <BattleCard key={b.id} battle={b} index={i} />
+                        {sortedBattles.map((b, i) => (
+                            <BattleCard battle={b} index={i} />
                         ))}
                     </div>
                 )}
