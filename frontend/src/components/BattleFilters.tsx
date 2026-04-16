@@ -1,5 +1,9 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { characters as allCharacters, modifiers as allModifiers, bosses as allBosses } from "../utils/gameData";
+import { DifficultyRange } from "./DifficultyRange";
+import { MultiSelect } from "./MultiSelect";
+import { RangeField } from "./RangeField";
+import { SingleSelect } from "./SingleSelect";
 
 export interface FilterState {
     outcome?: "won" | "lost";
@@ -60,221 +64,6 @@ function activeCount(f: FilterState): number {
     if (f.bossId !== undefined) 
         n++;
     return n;
-}
-
-interface MultiSelectProps {
-    label: string;
-    placeholder: string;
-    options: { value: string; label: string }[];
-    selected: string[];
-    onChange: (vals: string[]) => void;
-}
- 
-function MultiSelect({ label, placeholder, options, selected, onChange }: MultiSelectProps) {
-    const [open, setOpen] = useState(false);
-    const ref = useRef<HTMLDivElement>(null);
- 
-    useEffect(() => {
-        const handler = (e: MouseEvent) => {
-            if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-        };
-        document.addEventListener("mousedown", handler);
-        return () => document.removeEventListener("mousedown", handler);
-    }, []);
- 
-    const toggle = (val: string) => {
-        onChange(selected.includes(val) ? selected.filter((v) => v !== val) : [...selected, val]);
-    };
- 
-    const displayText =
-        selected.length === 0
-            ? placeholder
-            : selected.length === 1
-            ? options.find((o) => o.value === selected[0])?.label ?? selected[0]
-            : `${selected.length} selected`;
- 
-    return (
-        <div className="bf-field" ref={ref}>
-            <label className="bf-label">{label}</label>
-            <button
-                type="button"
-                className={`bf-trigger ${open ? "open" : ""} ${selected.length ? "has-value" : ""}`}
-                onClick={() => setOpen((v) => !v)}
-            >
-                <span className="bf-trigger-text">{displayText}</span>
-                {selected.length > 0 && (
-                    <span
-                        className="bf-clear-badge"
-                        onClick={(e) => { e.stopPropagation(); onChange([]); }}
-                        title="Clear"
-                    >
-                        {selected.length} ✕
-                    </span>
-                )}
-                <span className="bf-chevron">{open ? "▲" : "▼"}</span>
-            </button>
-            {open && (
-                <div className="bf-dropdown">
-                    {options.length === 0 ? (
-                        <div className="bf-empty-opt">No options available</div>
-                    ) : (
-                        options.map((opt) => (
-                            <label key={opt.value} className={`bf-option ${selected.includes(opt.value) ? "selected" : ""}`}>
-                                <input
-                                    type="checkbox"
-                                    checked={selected.includes(opt.value)}
-                                    onChange={() => toggle(opt.value)}
-                                />
-                                <span className="bf-opt-check">{selected.includes(opt.value) ? "✓" : ""}</span>
-                                <span className="bf-opt-label">{opt.label}</span>
-                            </label>
-                        ))
-                    )}
-                </div>
-            )}
-        </div>
-    );
-}
-
-interface SingleSelectProps {
-    label: string;
-    placeholder: string;
-    options: { value: string; label: string }[];
-    value: string | undefined;
-    onChange: (val: string | undefined) => void;
-}
- 
-function SingleSelect({ label, placeholder, options, value, onChange }: SingleSelectProps) {
-    const [open, setOpen] = useState(false);
-    const ref = useRef<HTMLDivElement>(null);
- 
-    useEffect(() => {
-        const handler = (e: MouseEvent) => {
-            if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-        };
-        document.addEventListener("mousedown", handler);
-        return () => document.removeEventListener("mousedown", handler);
-    }, []);
- 
-    const selected = options.find((o) => o.value === value);
- 
-    return (
-        <div className="bf-field" ref={ref}>
-            <label className="bf-label">{label}</label>
-            <button
-                type="button"
-                className={`bf-trigger ${open ? "open" : ""} ${value ? "has-value" : ""}`}
-                onClick={() => setOpen((v) => !v)}
-            >
-                <span className="bf-trigger-text">{selected?.label ?? placeholder}</span>
-                {value && (
-                    <span
-                        className="bf-clear-badge"
-                        onClick={(e) => { e.stopPropagation(); onChange(undefined); setOpen(false); }}
-                        title="Clear"
-                    >
-                        ✕
-                    </span>
-                )}
-                <span className="bf-chevron">{open ? "▲" : "▼"}</span>
-            </button>
-            {open && (
-                <div className="bf-dropdown">
-                    {options.map((opt) => (
-                        <label
-                            key={opt.value}
-                            className={`bf-option single ${value === opt.value ? "selected" : ""}`}
-                            onClick={() => { onChange(opt.value); setOpen(false); }}
-                        >
-                            <span className="bf-opt-check">{value === opt.value ? "◆" : ""}</span>
-                            <span className="bf-opt-label">{opt.label}</span>
-                        </label>
-                    ))}
-                </div>
-            )}
-        </div>
-    );
-}
-
-interface RangeFieldProps {
-    label: string;
-    minVal: number | undefined;
-    maxVal: number | undefined;
-    minPlaceholder?: string;
-    maxPlaceholder?: string;
-    onMinChange: (v: number | undefined) => void;
-    onMaxChange: (v: number | undefined) => void;
-    type?: "number" | "date";
-}
- 
-function RangeField({
-    label, minVal, maxVal, minPlaceholder = "Min", maxPlaceholder = "Max",
-    onMinChange, onMaxChange, type = "number",
-}: RangeFieldProps) {
-    const parseVal = (s: string) => {
-        if (!s) return undefined;
-        if (type === "number") { const n = parseInt(s, 10); return isNaN(n) ? undefined : n; }
-        return undefined;
-    };
- 
-    const hasValue = minVal !== undefined || maxVal !== undefined;
- 
-    return (
-        <div className="bf-field">
-            <label className="bf-label">
-                {label}
-                {hasValue && (
-                    <span
-                        className="bf-label-clear"
-                        onClick={() => { onMinChange(undefined); onMaxChange(undefined); }}
-                    >✕ clear</span>
-                )}
-            </label>
-            <div className="bf-range-row">
-                {type === "date" ? (
-                    <>
-                        <input
-                            type="date"
-                            className={`bf-range-input date-input ${minVal !== undefined ? "has-value" : ""}`}
-                            value={minVal !== undefined ? String(minVal) : ""}
-                            onChange={(e) => onMinChange(e.target.value ? (e.target.value as unknown as number) : undefined)}
-                            placeholder={minPlaceholder}
-                        />
-                        <span className="bf-range-sep">—</span>
-                        <input
-                            type="date"
-                            className={`bf-range-input date-input ${maxVal !== undefined ? "has-value" : ""}`}
-                            value={maxVal !== undefined ? String(maxVal) : ""}
-                            onChange={(e) => onMaxChange(e.target.value ? (e.target.value as unknown as number) : undefined)}
-                            placeholder={maxPlaceholder}
-                        />
-                    </>
-                ) : (
-                    <>
-                        <input
-                            type="number"
-                            className={`bf-range-input ${minVal !== undefined ? "has-value" : ""}`}
-                            value={minVal ?? ""}
-                            step={1}
-                            min={0}
-                            placeholder={minPlaceholder}
-                            onChange={(e) => onMinChange(parseVal(e.target.value))}
-                        />
-                        <span className="bf-range-sep">—</span>
-                        <input
-                            type="number"
-                            className={`bf-range-input ${maxVal !== undefined ? "has-value" : ""}`}
-                            value={maxVal ?? ""}
-                            step={1}
-                            min={0}
-                            placeholder={maxPlaceholder}
-                            onChange={(e) => onMaxChange(parseVal(e.target.value))}
-                        />
-                    </>
-                )}
-            </div>
-        </div>
-    );
 }
 
 export function BattleFilters({ filters, onChange, resultCount, totalCount }: BattleFiltersProps) {
@@ -385,12 +174,9 @@ export function BattleFilters({ filters, onChange, resultCount, totalCount }: Ba
                         />
  
                         {/* Difficulty range */}
-                        <RangeField
-                            label="Difficulty"
+                        <DifficultyRange
                             minVal={draft.diffMin}
                             maxVal={draft.diffMax}
-                            minPlaceholder="Min"
-                            maxPlaceholder="Max"
                             onMinChange={(v) => setDraftField("diffMin", v)}
                             onMaxChange={(v) => setDraftField("diffMax", v)}
                         />

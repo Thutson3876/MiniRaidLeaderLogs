@@ -501,6 +501,18 @@ body {
   text-shadow: -1px 1px 3px #000;
 }
 
+select.bf-range-input {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23666050'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 24px;
+}
+
+select.bf-range-input option {
+    background: #111;
+    color: var(--color-text);
+}
+
 .spinner {
   width: 24px;
   height: 24px;
@@ -785,7 +797,7 @@ body {
 
 .bf-range-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 6px;
 }
 
@@ -818,6 +830,38 @@ body {
   font-size: 0.6rem;
   color: var(--color-text-muted);
   text-transform: uppercase;
+  align-self: center;
+}
+
+.bf-field-difficulty {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.bf-field-difficulty > div { 
+  align-items: center;
+}
+
+.bf-field-difficulty .bf-label {
+  margin-bottom: 4px;
+}
+
+.bf-field-difficulty .bf-dropdown {
+  max-height: none; 
+  overflow-y: visible;
+}
+
+.bf-field-difficulty .bf-trigger {
+  min-width: 160px;
+}
+
+.bf-field-difficulty .bf-range-input {
+  width: 64px;
+  min-width: 64px;
+  text-align: center;
 }
 
 .link-btn {
